@@ -1,42 +1,93 @@
-// Buat baris header
-var headerRow = tableElement.insertRow(0);
-for (var key in jsonData[0]) {
-    var th = document.createElement('th');
-    th.innerHTML = key;
-    headerRow.appendChild(th);
-}
+<!DOCTYPE html>
+<html lang="en">
 
-// Tambahkan kolom nilai dan ipk ke dalam header
-var nilaiTh = document.createElement('th');
-nilaiTh.innerHTML = 'Nilai';
-headerRow.appendChild(nilaiTh);
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mengakses API dengan JavaScript</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
 
-var ipkTh = document.createElement('th');
-ipkTh.innerHTML = 'IPK';
-headerRow.appendChild(ipkTh);
+        h1 {
+            text-align: center;
+            color: #333;
+        }
 
-// Iterasi melalui setiap objek dalam data JSON dan buat baris untuk setiap objek
-jsonData.forEach(function (item, index) {
-    var row = tableElement.insertRow(-1);
-    for (var key in item) {
-        var cell = row.insertCell(-1);
-        cell.innerHTML = item[key];
-    }
+        table {
+            width: 80%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
 
-    // Tambahkan nilai dan ipk ke dalam baris
-    var nilaiCell = row.insertCell(-1);
-    nilaiCell.innerHTML = item['Nilai'];
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
 
-    var ipkCell = row.insertCell(-1);
-    ipkCell.innerHTML = item['IPK'];
+        th {
+            background-color: #4caf50;
+            color: #fff;
+        }
+    </style>
+</head>
 
-    // Tambahkan tombol hapus pada setiap baris
-    var deleteCell = row.insertCell(-1);
-    var deleteButton = document.createElement('button');
-    deleteButton.innerHTML = 'Hapus';
-    deleteButton.onclick = function () {
-        // Panggil fungsi untuk menghapus data saat tombol hapus ditekan
-        deleteData(index); // Menggunakan indeks sebagai parameter
-    };
-    deleteCell.appendChild(deleteButton);
-});
+<body>
+
+    <h1>Data dari API</h1>
+
+    <table id="apiData">
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Nilai</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        // URL API yang akan diakses
+        var apiUrl = 'https://sheet.best/api/sheets/a733ca49-b2b3-469c-9893-7725e9336605';
+
+        // Menggunakan Fetch API untuk mengambil data dari API
+        fetch(apiUrl)
+            .then(response => response.json())  // Mengonversi respons ke JSON
+            .then(data => {
+                // Data yang diterima dari API
+                var apiDataBody = document.querySelector('#apiData tbody');
+
+                // Membuat baris tabel untuk setiap data dan menambahkannya ke dalam tbody
+                data.forEach(item => {
+                    var row = apiDataBody.insertRow();
+                    row.innerHTML = `
+                        <td>${item.Nama}</td>
+                        <td>${item.Nilai}</td>
+                    `;
+                });
+            })
+            .catch(error => {
+                console.error('Terjadi kesalahan:', error.message);
+                // Menampilkan pesan kesalahan jika terjadi masalah saat mengambil data dari API
+                document.getElementById('apiData').innerHTML = 'Terjadi kesalahan saat mengambil data.';
+            });
+    </script>
+
+</body>
+
+</html>
+
+

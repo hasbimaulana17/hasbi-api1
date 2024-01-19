@@ -1,0 +1,42 @@
+// Buat baris header
+var headerRow = tableElement.insertRow(0);
+for (var key in jsonData[0]) {
+    var th = document.createElement('th');
+    th.innerHTML = key;
+    headerRow.appendChild(th);
+}
+
+// Tambahkan kolom nilai dan ipk ke dalam header
+var nilaiTh = document.createElement('th');
+nilaiTh.innerHTML = 'Nilai';
+headerRow.appendChild(nilaiTh);
+
+var ipkTh = document.createElement('th');
+ipkTh.innerHTML = 'IPK';
+headerRow.appendChild(ipkTh);
+
+// Iterasi melalui setiap objek dalam data JSON dan buat baris untuk setiap objek
+jsonData.forEach(function (item, index) {
+    var row = tableElement.insertRow(-1);
+    for (var key in item) {
+        var cell = row.insertCell(-1);
+        cell.innerHTML = item[key];
+    }
+
+    // Tambahkan nilai dan ipk ke dalam baris
+    var nilaiCell = row.insertCell(-1);
+    nilaiCell.innerHTML = item['Nilai'];
+
+    var ipkCell = row.insertCell(-1);
+    ipkCell.innerHTML = item['IPK'];
+
+    // Tambahkan tombol hapus pada setiap baris
+    var deleteCell = row.insertCell(-1);
+    var deleteButton = document.createElement('button');
+    deleteButton.innerHTML = 'Hapus';
+    deleteButton.onclick = function () {
+        // Panggil fungsi untuk menghapus data saat tombol hapus ditekan
+        deleteData(index); // Menggunakan indeks sebagai parameter
+    };
+    deleteCell.appendChild(deleteButton);
+});
